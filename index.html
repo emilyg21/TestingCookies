@@ -1,3 +1,11 @@
+<!-- OneTrust Cookies Consent Notice start for emilyg21.github.io/TestingCookies/ -->
+
+<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js"  type="text/javascript" charset="UTF-8" data-domain-script="0197c80f-6577-7c8f-ac82-f54c2230733f-test" ></script>
+<script type="text/javascript">
+function OptanonWrapper() { }
+</script>
+<!-- OneTrust Cookies Consent Notice end for emilyg21.github.io/TestingCookies/ -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +26,27 @@
       screenHeight: screen.height,
       clicks: [],
       scrollDepth: 0,
+      location: null  // will hold geolocation if granted
     };
+
+    // Request geolocation
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          trackingData.location = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            accuracy: position.coords.accuracy
+          };
+          console.log("Geolocation obtained:", trackingData.location);
+        },
+        (error) => {
+          console.warn("Geolocation error:", error.message);
+        }
+      );
+    } else {
+      console.warn("Geolocation not supported by this browser.");
+    }
 
     // Click tracking
     document.getElementById('buy').addEventListener('click', () => {
@@ -38,7 +66,7 @@
 
     // Unload (simulate sending data or saving to cookie)
     window.addEventListener('beforeunload', () => {
-      document.cookie = `lastVisit=${JSON.stringify(trackingData)}; path=/`;
+      document.cookie = `lastVisit=${encodeURIComponent(JSON.stringify(trackingData))}; path=/`;
     });
 
     // Show tracking data for demo
@@ -46,6 +74,7 @@
   </script>
 </body>
 </html>
+
 
 ---
 layout: default
