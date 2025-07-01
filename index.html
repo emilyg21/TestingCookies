@@ -1,3 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tracking Demo</title>
+</head>
+<body>
+  <h1>Tracking Simulation Page</h1>
+  <button id="buy">Buy Now</button>
+
+  <script>
+    // Simulated tracking data
+    const trackingData = {
+      timestamp: new Date().toISOString(),
+      page: window.location.pathname,
+      referrer: document.referrer,
+      userAgent: navigator.userAgent,
+      screenWidth: screen.width,
+      screenHeight: screen.height,
+      clicks: [],
+      scrollDepth: 0,
+    };
+
+    // Click tracking
+    document.getElementById('buy').addEventListener('click', () => {
+      trackingData.clicks.push({
+        element: 'Buy Button',
+        time: new Date().toISOString()
+      });
+      console.log("Button Click Tracked:", trackingData);
+      document.cookie = `clickEvent=BuyButton_${Date.now()}; path=/`;
+    });
+
+    // Scroll tracking
+    window.addEventListener('scroll', () => {
+      const scrolled = Math.round(window.scrollY / document.body.scrollHeight * 100);
+      trackingData.scrollDepth = scrolled;
+    });
+
+    // Unload (simulate sending data or saving to cookie)
+    window.addEventListener('beforeunload', () => {
+      document.cookie = `lastVisit=${JSON.stringify(trackingData)}; path=/`;
+    });
+
+    // Show tracking data for demo
+    console.log("Initial Tracking Data:", trackingData);
+  </script>
+</body>
+</html>
+
 ---
 layout: default
 title: Welcome
