@@ -13,18 +13,126 @@ title: Tracking Test Site
   function OptanonWrapper() { }
 </script>
 
-<h1>🔍 User Behavior Tracking Demo</h1>
-<p>This page tracks user behavior and displays logs in real-time.</p>
+<style>
+  body {
+    font-family: "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+  }
+  header {
+    background-color: #333;
+    color: white;
+    padding: 1em 2em;
+  }
+  header h1 {
+    margin: 0;
+  }
+  nav a {
+    color: #ccc;
+    margin-right: 1em;
+    text-decoration: none;
+  }
+  .hero {
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    color: white;
+    padding: 4em 2em;
+    text-align: center;
+  }
+  .container {
+    padding: 2em;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .post-preview {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 2em;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  .post-preview img {
+    width: 100%;
+    height: auto;
+  }
+  .post-preview .content {
+    padding: 1em;
+  }
+  footer {
+    text-align: center;
+    padding: 1em;
+    font-size: 0.9em;
+    color: #666;
+  }
+  #log {
+    background: #f0f0f0;
+    padding: 10px;
+    height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    font-family: monospace;
+    margin-top: 1em;
+  }
+  .spacer {
+    height: 1500px;
+  }
+</style>
+
+<header>
+  <h1>My Sample Blog</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="TrackingTest.html">Tracking Demo</a>
+    <a href="#">About</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Welcome to My Blog</h2>
+  <p>This is a demo landing page for a blog hosted on GitHub Pages.</p>
+</section>
+
+<main class="container">
+
+  <div class="post-preview">
+    <img src="https://via.placeholder.com/900x300?text=Sample+Blog+Post+1" alt="Post 1 image">
+    <div class="content">
+      <h3>Post Title One</h3>
+      <p>This is a sample summary of a blog post. It introduces the topic and draws the reader in. Click to read more!</p>
+    </div>
+  </div>
+
+  <div class="post-preview">
+    <img src="https://via.placeholder.com/900x300?text=Sample+Blog+Post+2" alt="Post 2 image">
+    <div class="content">
+      <h3>Post Title Two</h3>
+      <p>Another blog post preview with some placeholder text to fill space. Great for showing off what your writing might look like.</p>
+    </div>
+  </div>
+
+  <div class="post-preview">
+    <img src="https://via.placeholder.com/900x300?text=Sample+Blog+Post+3" alt="Post 3 image">
+    <div class="content">
+      <h3>Post Title Three</h3>
+      <p>This one could be a photo blog, an article, or a portfolio item. You can adapt it however you'd like.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  © 2025 Your Name — Built with GitHub Pages
+</footer>
 
 <button id="buyBtn">💸 Buy Now</button>
 
 <h2>📋 Tracking Log</h2>
 <div id="log">Waiting for activity...</div>
 
-<div class="spacer" style="height: 1500px;"></div>
+<div class="spacer"></div>
 
 <script>
-  // Wait until DOM is loaded
   document.addEventListener('DOMContentLoaded', () => {
     const logEl = document.getElementById('log');
     const buyBtn = document.getElementById('buyBtn');
@@ -45,7 +153,6 @@ title: Tracking Test Site
       location: null
     };
 
-    // Click tracking
     buyBtn.addEventListener('click', () => {
       const time = new Date().toISOString();
       trackingData.clicks.push({ element: 'Buy Button', time });
@@ -53,13 +160,11 @@ title: Tracking Test Site
       log(`💬 Button clicked at ${time}`);
     });
 
-    // Scroll tracking
     window.addEventListener('scroll', () => {
       const scrolled = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
       trackingData.scrollDepth = scrolled;
     });
 
-    // Geolocation tracking
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -78,12 +183,10 @@ title: Tracking Test Site
       log("❌ Geolocation not supported.");
     }
 
-    // On unload, store summary
     window.addEventListener('beforeunload', () => {
       document.cookie = `lastVisit=${encodeURIComponent(JSON.stringify(trackingData))}; path=/`;
     });
 
-    // Initial log
     log("✅ Tracking initialized...");
   });
 </script>
