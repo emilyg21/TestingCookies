@@ -3,47 +3,21 @@ layout: default
 title: Tracking Test Site
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Tracking Test Site</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 40px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-    }
-    #log {
-      margin-top: 20px;
-      background: #f0f0f0;
-      padding: 10px;
-      height: 200px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      font-family: monospace;
-    }
-    .spacer {
-      height: 1500px;
-    }
-  </style>
-</head>
-<body>
+<h1>🔍 User Behavior Tracking Demo</h1>
+<p>This page tracks user behavior and displays logs in real-time.</p>
 
-  <h1>🔍 User Behavior Tracking Demo</h1>
-  <p>This page demonstrates browser-based tracking of user activity using cookies, JavaScript, and geolocation.</p>
+<button id="buyBtn">💸 Buy Now</button>
 
-  <button id="buyBtn">💸 Buy Now</button>
-  <div class="spacer"></div>
+<h2>📋 Tracking Log</h2>
+<div id="log">Waiting for activity...</div>
 
-  <h2>📋 Tracking Log</h2>
-  <div id="log">Waiting for activity...</div>
+<div class="spacer" style="height: 1500px;"></div>
 
-  <script>
+<script>
+  // Wait until DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
     const logEl = document.getElementById('log');
+    const buyBtn = document.getElementById('buyBtn');
 
     function log(msg) {
       console.log(msg);
@@ -62,7 +36,7 @@ title: Tracking Test Site
     };
 
     // Click tracking
-    document.getElementById('buyBtn').addEventListener('click', () => {
+    buyBtn.addEventListener('click', () => {
       const time = new Date().toISOString();
       trackingData.clicks.push({ element: 'Buy Button', time });
       document.cookie = `clickEvent=BuyNow_${Date.now()}; path=/`;
@@ -101,7 +75,5 @@ title: Tracking Test Site
 
     // Initial log
     log("✅ Tracking initialized...");
-  </script>
-
-</body>
-</html>
+  });
+</script>
