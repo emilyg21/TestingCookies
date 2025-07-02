@@ -127,33 +127,6 @@ title: Tracking Test Site
 
 <button id="buyBtn">💸 Buy Now</button>
 
-    // Form tracking
-    const form = document.getElementById('subscribeForm');
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault(); // Prevent actual form submission
-
-        const name = form.name.value.trim();
-        const email = form.email.value.trim();
-        const time = new Date().toISOString();
-
-        if (name && email) {
-          // Store in cookies
-          document.cookie = `formName=${encodeURIComponent(name)}; path=/`;
-          document.cookie = `formEmail=${encodeURIComponent(email)}; path=/`;
-
-          // Log activity
-          trackingData.clicks.push({ element: 'Subscribe Form', time, name, email });
-          log(`📩 Form submitted at ${time} | Name: ${name}, Email: ${email}`);
-        } else {
-          log("⚠️ Incomplete form submission");
-        }
-
-        form.reset();
-      });
-    }
-
-
 <h2>📋 Tracking Log</h2>
 <div id="log">Waiting for activity...</div>
 
@@ -187,6 +160,32 @@ title: Tracking Test Site
       log(`💬 Button clicked at ${time}`);
     });
 
+    // Form tracking
+    const form = document.getElementById('subscribeForm');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevent actual form submission
+
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        const time = new Date().toISOString();
+
+        if (name && email) {
+          // Store in cookies
+          document.cookie = `formName=${encodeURIComponent(name)}; path=/`;
+          document.cookie = `formEmail=${encodeURIComponent(email)}; path=/`;
+
+          // Log activity
+          trackingData.clicks.push({ element: 'Subscribe Form', time, name, email });
+          log(`📩 Form submitted at ${time} | Name: ${name}, Email: ${email}`);
+        } else {
+          log("⚠️ Incomplete form submission");
+        }
+
+        form.reset();
+      });
+    }
+    
     window.addEventListener('scroll', () => {
       const scrolled = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
       trackingData.scrollDepth = scrolled;
