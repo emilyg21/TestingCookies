@@ -1,64 +1,107 @@
 ---
 layout: default
-title: Tracking Demo
+title: Tracking Test Site
 ---
 
-<!-- OneTrust Cookies Consent Notice start -->
-<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" type="text/javascript" charset="UTF-8" data-domain-script="0197c80f-6577-7c8f-ac82-f54c2230733f-test"></script>
-<script type="text/javascript">
-  function OptanonWrapper() { }
-</script>
-<!-- OneTrust Cookies Consent Notice end -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tracking Test Site</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 40px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #log {
+      margin-top: 20px;
+      background: #f0f0f0;
+      padding: 10px;
+      height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      font-family: monospace;
+    }
+    .spacer {
+      height: 1500px;
+    }
+  </style>
+</head>
+<body>
 
-<h1>Tracking Simulation Page</h1>
-<button id="buy">Buy Now</button>
+  <h1>🔍 User Behavior Tracking Demo</h1>
+  <p>This page demonstrates browser-based tracking of user activity using cookies, JavaScript, and geolocation.</p>
 
-<script>
-  const trackingData = {
-    timestamp: new Date().toISOString(),
-    page: window.location.pathname,
-    referrer: document.referrer,
-    userAgent: navigator.userAgent,
-    screenWidth: screen.width,
-    screenHeight: screen.height,
-    clicks: [],
-    scrollDepth: 0,
-    location: null
-  };
+  <button id="buyBtn">💸 Buy Now</button>
+  <div class="spacer"></div>
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        trackingData.location = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          accuracy: position.coords.accuracy
-        };
-        console.log("Geolocation obtained:", trackingData.location);
-      },
-      (error) => {
-        console.warn("Geolocation error:", error.message);
-      }
-    );
-  }
+  <h2>📋 Tracking Log</h2>
+  <div id="log">Waiting for activity...</div>
 
-  document.getElementById('buy').addEventListener('click', () => {
-    trackingData.clicks.push({
-      element: 'Buy Button',
-      time: new Date().toISOString()
+  <script>
+    const logEl = document.getElementById('log');
+
+    function log(msg) {
+      console.log(msg);
+      logEl.innerHTML += `<div>> ${msg}</div>`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    const trackingData = {
+      timestamp: new Date().toISOString(),
+      referrer: document.referrer || 'direct',
+      userAgent: navigator.userAgent,
+      screenSize: `${screen.width}x${screen.height}`,
+      clicks: [],
+      scrollDepth: 0,
+      location: null
+    };
+
+    // Click tracking
+    document.getElementById('buyBtn').addEventListener('click', () => {
+      const time = new Date().toISOString();
+      trackingData.clicks.push({ element: 'Buy Button', time });
+      document.cookie = `clickEvent=BuyNow_${Date.now()}; path=/`;
+      log(`💬 Button clicked at ${time}`);
     });
-    console.log("Button Click Tracked:", trackingData);
-    document.cookie = `clickEvent=BuyButton_${Date.now()}; path=/`;
-  });
 
-  window.addEventListener('scroll', () => {
-    const scrolled = Math.round(window.scrollY / document.body.scrollHeight * 100);
-    trackingData.scrollDepth = scrolled;
-  });
+    // Scroll tracking
+    window.addEventListener('scroll', () => {
+      const scrolled = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+      trackingData.scrollDepth = scrolled;
+    });
 
-  window.addEventListener('beforeunload', () => {
-    document.cookie = `lastVisit=${encodeURIComponent(JSON.stringify(trackingData))}; path=/`;
-  });
+    // Geolocation tracking
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          trackingData.location = {
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+            accuracy: pos.coords.accuracy
+          };
+          document.cookie = `lat=${pos.coords.latitude}; path=/`;
+          document.cookie = `lon=${pos.coords.longitude}; path=/`;
+          log(`📍 Geolocation: ${pos.coords.latitude}, ${pos.coords.longitude} (±${pos.coords.accuracy}m)`);
+        },
+        (err) => log(`❌ Geolocation error: ${err.message}`)
+      );
+    } else {
+      log("❌ Geolocation not supported.");
+    }
 
-  console.log("Initial Tracking Data:", trackingData);
-</script>
+    // On unload, store summary
+    window.addEventListener('beforeunload', () => {
+      document.cookie = `lastVisit=${encodeURIComponent(JSON.stringify(trackingData))}; path=/`;
+    });
+
+    // Initial log
+    log("✅ Tracking initialized...");
+  </script>
+
+</body>
+</html>
